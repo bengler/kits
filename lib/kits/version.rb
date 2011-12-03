@@ -1,0 +1,3 @@
+module Kits
+  VERSION = "0.0.1"
+end
