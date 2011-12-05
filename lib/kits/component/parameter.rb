@@ -1,5 +1,5 @@
-class Kits::Fragment::Parameter
-  attr_accessor :name, :description, :title
+class Kits::Component::Parameter
+  attr_accessor :name, :description
 
   def initialize(name, options)
     @name = name
@@ -9,5 +9,9 @@ class Kits::Fragment::Parameter
 
   def required?
     @required
+  end
+
+  def as_json
+    {:name => @name, :description => @description}
   end
 end
