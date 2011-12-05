@@ -1,4 +1,4 @@
-class Kits::Component
+class Kits::Part
   attr_accessor :kit, :title, :description, :name, :parameters, :action, :definition_file
 
   def initialize(kit, name)
@@ -9,11 +9,11 @@ class Kits::Component
 
   def self.load(kit, definition_file)    
     /(?<name>.*).part.rb$/ =~ File.basename(definition_file)
-    raise ArgumentError, "A component definition must end in '.part.rb'" unless name
-    builder = Builder.new(Kits::Component.new(kit, name))
+    raise ArgumentError, "A part definition must end in '.part.rb'" unless name
+    builder = Builder.new(Kits::Part.new(kit, name))
     builder.instance_eval(File.read(definition_file), definition_file)
-    builder.component.definition_file = definition_file
-    builder.component
+    builder.part.definition_file = definition_file
+    builder.part
   end
 
   def asset_path
@@ -29,7 +29,7 @@ class Kits::Component
   end
 
   def as_json
-    {:component => {
+    {:part => {
       :name => @name, :title => @title, :description => @description, 
       :parameters => @parameters.values.map(&:as_json),
       :preloadable => !@action.nil?}}

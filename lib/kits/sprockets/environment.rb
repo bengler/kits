@@ -3,7 +3,7 @@ require 'sprockets'
 module Kits::Sprockets
 
   class JavascriptDirectiveProcessor < ::Sprockets::DirectiveProcessor
-    def process_require_components_directive
+    def process_require_parts_directive
       # context.environment returns a Sprockets::Index at this point.
       # This hackery introduced to get at the real Environment where
       # we keep our kit.
@@ -15,7 +15,7 @@ module Kits::Sprockets
   end
 
   class CSSDirectiveProcessor < ::Sprockets::DirectiveProcessor
-    def process_require_components_directive
+    def process_require_parts_directive
       environment = context.environment.instance_variable_get(:@environment)
       environment.kit.stylesheets.each do |path|
         context.require_asset(path)

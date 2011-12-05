@@ -16,37 +16,37 @@ describe "API v1 posts" do
   it "Knows where to look for assets" do
     app.kit.asset_paths.sort[0].should =~ /\/parts$/
     app.kit.asset_paths.sort[1].should =~ /\/parts\/demo$/
-    app.kit.components['demo'].script.should =~ /\/demo\/demo\.js\.coffee$/
-    app.kit.components['withcss'].stylesheet.should =~ /\/withcss\.css$/
+    app.kit.parts['demo'].script.should =~ /\/demo\/demo\.js\.coffee$/
+    app.kit.parts['withcss'].stylesheet.should =~ /\/withcss\.css$/
   end
 
   it "Has a kit property" do
     app.kit.should_not be_nil
-    app.kit.components.keys.sort.should eq ['demo', 'other', 'withcss'].sort
+    app.kit.parts.keys.sort.should eq ['demo', 'other', 'withcss'].sort
   end
 
-  it "Presents the registered components" do
-    get "/components"
+  it "Presents the registered parts" do
+    get "/parts"
     result = JSON.parse(last_response.body)
-    result['demo']['component'].keys.sort.should eq ['name', 'title', 'description', 'parameters', 'preloadable'].sort
-    result['demo']['component']['parameters'].map{|p| p['name']}.sort.should eq ['param_1', 'param_2'].sort
+    result['demo']['part'].keys.sort.should eq ['name', 'title', 'description', 'parameters', 'preloadable'].sort
+    result['demo']['part']['parameters'].map{|p| p['name']}.sort.should eq ['param_1', 'param_2'].sort
   end
 
-  it "Provides a component called demo" do
-    get "/components/demo"
+  it "Provides a part called demo" do
+    get "/parts/demo"
     last_response.body.should eq "Hello world"
   end
 
   it "Presents itself as preloadable since it has a server side implementation" do
-    get "/components"
+    get "/parts"
     result = JSON.parse(last_response.body)
-    result['demo']['component']['preloadable'].should be_true
+    result['demo']['part']['preloadable'].should be_true
   end
 
-  it "Implements a special directive to require all component javascripts" do
-    get "/components/assets/parts.js"
+  it "Implements a special directive to require all part javascripts" do
+    get "/parts/assets/parts.js"
     last_response.body.should =~ /Hello from coffeescript/
-    get "/components/assets/parts.css"
+    get "/parts/assets/parts.css"
     last_response.body.should =~ /hello\.from\.css/
   end
 

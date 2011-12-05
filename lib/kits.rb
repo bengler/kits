@@ -1,10 +1,10 @@
 require "kits/version"
 require "kits/kit"
-require "kits/component"
+require "kits/part"
 require "kits/sprockets/environment"
 require "kits/sinatra"
-require "kits/component/builder"
-require "kits/component/parameter"
+require "kits/part/builder"
+require "kits/part/parameter"
 
 
 module Kits

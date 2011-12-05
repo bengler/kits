@@ -5,12 +5,12 @@ module Sinatra
 
     def self.registered(app)
       app.set :kit, Kits::Kit.new
-      self.load_components(app)
-      app.get "/components" do
+      self.load_parts(app)
+      app.get "/parts" do
         settings.kit.as_json.to_json
       end
       app.set :kit_sprockets, Kits::Sprockets::Environment.new(app.root, app.kit)
-      app.get "/components/assets/:asset" do |asset|
+      app.get "/parts/assets/:asset" do |asset|
         env["PATH_INFO"] = "/#{asset}"
         settings.kit_sprockets.call(env)
       end
@@ -18,10 +18,10 @@ module Sinatra
 
     private
 
-    def self.load_components(app)
+    def self.load_parts(app)
       Dir.glob(app.root+'/**/*.part.rb').each do |file_name|
-        component = app.kit.load_component(file_name)
-        app.get("/components/#{component.name}", {}, &component.action) if component.action 
+        part = app.kit.load_part(file_name)
+        app.get("/parts/#{part.name}", {}, &part.action) if part.action 
       end
     end
 

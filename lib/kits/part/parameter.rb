@@ -1,4 +1,4 @@
-class Kits::Component::Parameter
+class Kits::Part::Parameter
   attr_accessor :name, :description
 
   def initialize(name, options)

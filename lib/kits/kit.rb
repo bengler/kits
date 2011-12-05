@@ -2,35 +2,35 @@ require 'set'
 require 'sinatra'
 
 class Kits::Kit
-  attr_reader :components
+  attr_reader :parts
 
   def initialize
-    @components = {}
+    @parts = {}
   end
 
-  def load_component(definition_file)
-    component = Kits::Component.load(self, definition_file)
-    @components[component.name] = component
-    component
+  def load_part(definition_file)
+    part = Kits::Part.load(self, definition_file)
+    @parts[part.name] = part
+    part
   end
 
-  # The asset paths for every component
+  # The asset paths for every part
   def asset_paths
-    @components.values.map(&:asset_path).compact.uniq
+    @parts.values.map(&:asset_path).compact.uniq
   end
 
-  # The main javascript for every component
+  # The main javascript for every part
   def scripts
-    @components.values.map(&:script).compact
+    @parts.values.map(&:script).compact
   end
 
-  # The main css for every component
+  # The main css for every part
   def stylesheets
-    @components.values.map(&:stylesheet).compact
+    @parts.values.map(&:stylesheet).compact
   end
 
   def as_json
-    Hash[@components.map {|k, v| [k, v.as_json]}]
+    Hash[@parts.map {|k, v| [k, v.as_json]}]
   end
 
 end

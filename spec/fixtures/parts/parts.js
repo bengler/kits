@@ -1,3 +1,3 @@
-//= require_components
+//= require_parts
 
 // Hello from parts.js
