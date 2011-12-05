@@ -2,21 +2,35 @@ require 'set'
 require 'sinatra'
 
 class Kits::Kit
-  attr_reader :parts
+  attr_reader :parts, :root
 
-  def initialize
+  def initialize(root)
+    @root = root
     @parts = {}
   end
 
   def load_part(definition_file)
-    part = Kits::Part.load(self, definition_file)
+    part = Kits::Part.load(definition_file)
     @parts[part.name] = part
     part
   end
 
   # The asset paths for every part
   def asset_paths
-    @parts.values.map(&:asset_path).compact.uniq
+    paths = @parts.values.map(&:asset_path)
+    paths << File.dirname(script) if script
+    paths << File.dirname(stylesheet) if stylesheet
+    paths.compact.uniq
+  end
+
+  # Locate the common parts.js
+  def script
+    @script ||= (Dir.glob(root+'/**/parts.js').first || Dir.glob(root+'/**/parts.js.coffee').first)
+  end
+
+  # Locate the common parts.css
+  def stylesheet
+    @stylesheet ||= Dir.glob(root+'/**/parts.*css').first
   end
 
   # The main javascript for every part

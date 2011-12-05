@@ -1,16 +1,15 @@
 class Kits::Part
-  attr_accessor :kit, :title, :description, :name, :parameters, :action, :definition_file
+  attr_accessor :title, :description, :name, :parameters, :action, :definition_file
 
-  def initialize(kit, name)
-    @kit = kit
+  def initialize(name)
     @name = name
     @parameters = {}
   end
 
-  def self.load(kit, definition_file)    
+  def self.load(definition_file)    
     /(?<name>.*).part.rb$/ =~ File.basename(definition_file)
     raise ArgumentError, "A part definition must end in '.part.rb'" unless name
-    builder = Builder.new(Kits::Part.new(kit, name))
+    builder = Builder.new(Kits::Part.new(name))
     builder.instance_eval(File.read(definition_file), definition_file)
     builder.part.definition_file = definition_file
     builder.part
