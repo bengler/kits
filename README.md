@@ -56,8 +56,8 @@ definition DSL provided. A typical part definition file could look like this:
       end
     end
 
-The +action+ part of the definition indicates that the part supports server side rendering and is mapped into
-your sinatra app at "/parts/blog_post", so it is equivalent of writing +get "/parts/blog_post"+. 
+The `action` part of the definition indicates that the part supports server side rendering and is mapped into
+your sinatra app at "/parts/blog_post", so it is equivalent of writing `get "/parts/blog_post"`.
 
 ## Application configuration
 
@@ -69,10 +69,10 @@ To make you Sinatra-app serve your kit, you have to register the PartsKit extens
     end
 
 Registering the extension loads all your parts and registers all routes and asset_paths. The following routes are 
-provided by +PartsKit+:
+provided by `PartsKit`:
 
     /parts                     # A json hash describing all parts provided in this kit
-    /parts/client_templates    # All client side templates (mustache) wrapped in +<script>+ tags
+    /parts/client_templates    # All client side templates (mustache) wrapped in <script> tags
     /parts/my_part1
     /parts/my_part2            # The default actions for all server side parts
     /parts/assets/             # The root path of all assets in all your part-folders
@@ -83,7 +83,7 @@ provided by +PartsKit+:
 Assets are served through Sprockets and processing is provided by it, so when requiring assets you should never
 include pathnames in your url, only the "logical path" which is the name of the completely processed asset. So
 if you e.g. have a coffescript in the folder /parts/my_part/my_special_script.js.coffee, you can get it compiled and ready
-at the Sinatra application path +/parts/assets/my_special_script.js+. 
+at the Sinatra application path `/parts/assets/my_special_script.js`. 
 
 The sprockets environment used by PartsKit is available in your sinatra app as MyApp.kit_sprockets should you require
 further configuration.
