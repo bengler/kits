@@ -5,7 +5,7 @@ class Kits::ClientTemplates
   CLIENT_TEMPLATE_RECOGNIZER = /\.mustache$/
 
   def initialize(service_name, files, sprockets = nil)
-    @namespace = service_name
+    @service_name = service_name
     @template_files = files.select{ |path| path =~ CLIENT_TEMPLATE_RECOGNIZER }
     @sprockets = sprockets
   end
@@ -15,7 +15,7 @@ class Kits::ClientTemplates
     @template_files.map do |path|
       name = self.class.template_name(path)
       type = self.class.template_type(path)
-      "<script data-template-name=\"#{@namespace}.#{name}\" data-template-language=\"#{type}\" type=\"text/html\">#{template_body(path)}</script>"
+      "<script data-template-name=\"#{@service_name}.#{name}\" data-template-language=\"#{type}\" type=\"text/html\">#{template_body(path)}</script>"
     end.join
   end
 
