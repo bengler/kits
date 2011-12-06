@@ -14,8 +14,9 @@ module Sinatra
 
     def self.load_parts(app)
       Dir.glob(app.kit.root+'/**/*.part.rb').each do |file_name|
-        part = app.kit.load_part(file_name)
-        app.get("/parts/#{part.name}", {}, &part.action) if part.action 
+        app.kit.load_parts(file_name).each do |part|
+          app.get("/parts/#{part.name}", {}, &part.action) if part.action 
+        end
       end
       # Publish parts-registry api-call
       app.get "/parts" do

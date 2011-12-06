@@ -1,23 +1,40 @@
 class Kits::Part::Builder
-  attr_reader :part
+  attr_reader :parts
 
-  def initialize(part)
-    @part = part
+  def initialize(definition_file = nil)
+    @parts = []
+    @definition_file = definition_file
   end
 
-  def title(title)
-    @part.title = title
+  def part(name, &block)
+    part_builder = PartBuilder.new(Kits::Part.new(name.to_s))
+    part_builder.instance_eval(&block)
+    part_builder.part.definition_file = @definition_file
+    @parts << part_builder.part
+    part_builder.part
   end
 
-  def description(description)
-    @part.description = description
-  end
+  class PartBuilder
+    attr_reader :part
 
-  def param(name, description, options = {})
-    @part.parameters[name.to_s] = Kits::Part::Parameter.new(name, {:description => description}.merge(options))
-  end
+    def initialize(part)
+      @part = part
+    end
 
-  def action(&block)
-    @part.action = block
+    def title(title)
+      @part.title = title
+    end
+
+    def description(description)
+      @part.description = description
+    end
+
+    def param(name, description, options = {})
+      @part.parameters[name.to_s] = Kits::Part::Parameter.new(name, {:description => description}.merge(options))
+    end
+
+    def action(&block)
+      @part.action = block
+    end
   end
 end

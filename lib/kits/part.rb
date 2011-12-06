@@ -9,10 +9,9 @@ class Kits::Part
   def self.load(definition_file)    
     /(?<name>.*).part.rb$/ =~ File.basename(definition_file)
     raise ArgumentError, "A part definition must end in '.part.rb'" unless name
-    builder = Builder.new(Kits::Part.new(name))
+    builder = Builder.new(definition_file)
     builder.instance_eval(File.read(definition_file), definition_file)
-    builder.part.definition_file = definition_file
-    builder.part
+    builder.parts
   end
 
   def asset_path

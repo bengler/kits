@@ -9,10 +9,10 @@ class Kits::Kit
     @parts = {}
   end
 
-  def load_part(definition_file)
-    part = Kits::Part.load(definition_file)
-    @parts[part.name] = part
-    part
+  def load_parts(definition_file)
+    parts = Kits::Part.load(definition_file)
+    parts.each { |part| @parts[part.name] = part }
+    parts
   end
 
   # The asset paths for every part
