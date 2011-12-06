@@ -22,7 +22,7 @@ describe "API v1 posts" do
 
   it "Has a kit property" do
     app.kit.should_not be_nil
-    app.kit.parts.keys.sort.should eq ['demo', 'other', 'withcss'].sort
+    app.kit.parts.keys.sort.should eq ['demo', 'other', 'withcss', 'hamlpart'].sort
   end
 
   it "Presents the registered parts" do
@@ -48,6 +48,16 @@ describe "API v1 posts" do
     last_response.body.should =~ /Hello from coffeescript/
     get "/parts/assets/parts.css"
     last_response.body.should =~ /hello\.from\.css/
+  end
+
+  it "has discovered templates" do
+    app.templates.keys.should include :default
+  end
+
+  it "can render a template" do
+    get "/parts/hamlpart"
+    last_response.body.should_not =~ /application\serror/
+    last_response.body.should =~ /Hello from haml/
   end
 
 end

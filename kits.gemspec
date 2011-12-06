@@ -24,5 +24,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sinatra"
   s.add_development_dependency "sprockets"
   s.add_development_dependency "coffee-script"
+  s.add_development_dependency "haml"
   # s.add_runtime_dependency "rest-client"
 end
