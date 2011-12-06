@@ -34,6 +34,7 @@ module Sinatra
     def self.register_templates(app)
       # Register all templates
       Tilt.mappings.each do |ext, engines|
+        next unless engines.map(&:default_mime_type).include?('text/html')
         Dir.glob(app.kit.root+"/**/*.#{ext}").each do |path|
           template_key =  File.basename(path).scan(/^[^\.]+/).first.to_sym
           $stderr.puts "Warning: A template named #{template_key} defined more than once." if app.templates[template_key]

@@ -50,8 +50,9 @@ describe "API v1 posts" do
     last_response.body.should =~ /hello\.from\.css/
   end
 
-  it "has discovered templates" do
-    app.templates.keys.should include :default
+  it "has discovered html templates (but not js-templates)" do
+    app.templates.keys.should include :hamlpart
+    app.templates.keys.should_not include :demo
   end
 
   it "can render a template" do
