@@ -33,18 +33,24 @@ module Sinatra
 
     def self.register_templates(app)
       # Register all templates
-      Tilt.mappings.each do |ext, engines|
-        next unless engines.map(&:default_mime_type).include?('text/html')
-        Dir.glob(app.kit.root+"/**/*.#{ext}").each do |path|
-          template_key =  File.basename(path).scan(/^[^\.]+/).first.to_sym
-          $stderr.puts "Warning: A template named #{template_key} defined more than once." if app.templates[template_key]
-          content = File.read(path)
-          app.template(template_key) { content }
-        end
+      app.kit.templates.each do |path|
+        template_key =  File.basename(path).scan(/^[^\.]+/).first.to_sym
+        $stderr.puts "Warning: A template named #{template_key} defined more than once." if app.templates[template_key]
+        content = File.read(path)
+        app.template(template_key) { content }
+      end
+      app.get "/parts/client_templates" do
+        @embeddable_client_template_html ||= 
+          Kits::ClientTemplates.new(
+            Sinatra::PartsKit.discover_service_name(env['PATH_INFO']),
+            app.kit.templates, 
+            app.kit_sprockets).generate
       end
     end
 
+    def self.discover_service_name(http_path)
+      /^\/api\/(?<service>[^\/]+)\/v\d+/ =~ http_path
+      service || 'example'
+    end
   end
-
-  register PartsKit
 end

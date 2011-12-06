@@ -43,6 +43,13 @@ class Kits::Kit
     @parts.values.map(&:stylesheet).compact
   end
 
+  # Paths to every template
+  def templates
+    @template_paths ||= Tilt.mappings.map do |ext, engines|
+      Dir.glob(@root+"/**/*.#{ext}") if engines.map(&:default_mime_type).include?('text/html')
+    end.flatten.compact
+  end
+
   def as_json
     Hash[@parts.map {|k, v| [k, v.as_json]}]
   end

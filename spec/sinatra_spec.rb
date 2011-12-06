@@ -22,7 +22,7 @@ describe "API v1 posts" do
 
   it "Has a kit property" do
     app.kit.should_not be_nil
-    app.kit.parts.keys.sort.should eq ['demo', 'other', 'withcss', 'hamlpart'].sort
+    app.kit.parts.keys.sort.should eq ['demo', 'other', 'withcss', 'hamlpart', 'mustachepart'].sort
   end
 
   it "Presents the registered parts" do
@@ -59,6 +59,13 @@ describe "API v1 posts" do
     get "/parts/hamlpart"
     last_response.body.should_not =~ /application\serror/
     last_response.body.should =~ /Hello from haml/
+  end
+
+  it "locates client side templates and builds a bundle" do
+    get "/parts/client_templates"
+    last_response.body.should_not =~ /application\serror/
+    last_response.body.should =~ /Hello from mustache/
+    last_response.body.should =~ /mustachetemplate/    
   end
 
 end
