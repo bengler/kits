@@ -64,8 +64,15 @@ describe "API v1 posts" do
   it "locates client side templates and builds a bundle" do
     get "/parts/client_templates"
     last_response.body.should_not =~ /application\serror/
-    last_response.body.should =~ /Hello from mustache/
+    last_response.body.should =~ /Hello from \{\{mustache\}\}/
     last_response.body.should =~ /mustachetemplate/    
+  end
+
+  it "can render mustache templates on the server too" do
+    get "/parts/mustachepart"
+    last_response.body.should_not =~ /application\serror/
+    last_response.body.should_not =~ /\{\{mustache\}\}/
+    last_response.body.should =~ /Hello from data/
   end
 
 end

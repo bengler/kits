@@ -1,4 +1,5 @@
 require 'tilt'
+require 'sinatra'
 
 module Tilt
   class MustacheTemplate < Template
@@ -15,4 +16,10 @@ module Tilt
     end
   end
   register MustacheTemplate, 'mustache'
+end
+
+module Sinatra::Templates
+  def mustache(template, options={}, locals={})
+    render :mustache, template, options, locals
+  end
 end
