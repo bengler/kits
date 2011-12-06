@@ -6,7 +6,7 @@ Kits is a Sinatra extension that makes it easy to provide Pebbles frontend parts
 
 Stick this in you Gemfile:
    
-   gem "kits", :git => 'git@github.com:benglerpebbles/kits.git'
+    gem "kits", :git => 'git@github.com:benglerpebbles/kits.git'
 
 # Usage
 
