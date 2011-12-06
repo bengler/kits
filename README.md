@@ -48,7 +48,7 @@ definition DSL provided. A typical part definition file could look like this:
       title "Blog post"
       description "Renders a blog post"
       param :id, "Id of the blog post"
-      param :style, "Style, on of: 'compact', 'normal', 'expanded'. Default is 'normal'"
+      param :style, "Style, one of: 'compact', 'normal', 'expanded'. Default is 'normal'"
 
       action do
         post = BlogPost.find(params[:id])
@@ -73,8 +73,7 @@ provided by `PartsKit`:
 
     /parts                     # A json hash describing all parts provided in this kit
     /parts/client_templates    # All client side templates (mustache) wrapped in <script> tags
-    /parts/my_part1
-    /parts/my_part2            # The default actions for all server side parts
+    /parts/<part name>         # The render `action` for parts that provide one
     /parts/assets/             # The root path of all assets in all your part-folders
     /parts/assets/parts.js     # All part scripts and anything else you required in /parts/parts.js
     /parts/assets/parts.css    # All parts stylesheets and anything else you required in /parts/parts.css
