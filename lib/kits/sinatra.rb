@@ -43,15 +43,10 @@ module Sinatra
       app.get "/parts/client_templates" do
         @embeddable_client_template_html ||= 
           Kits::ClientTemplates.new(
-            Sinatra::PartsKit.discover_service_name(env['PATH_INFO']),
+            app.service_name,
             app.kit.templates, 
             app.kit_sprockets).generate
       end
-    end
-
-    def self.discover_service_name(http_path)
-      /^\/api\/(?<service>[^\/]+)\/v\d+/ =~ http_path
-      service || 'example'
     end
   end
 end
