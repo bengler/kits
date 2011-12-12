@@ -2,7 +2,7 @@
 
 class Kits::ClientTemplates
   attr_reader :template_files
-  CLIENT_TEMPLATE_RECOGNIZER = /\.mustache$/
+  CLIENT_TEMPLATE_RECOGNIZER = /\.mustache|\.fu$/
 
   def initialize(service_name, files, sprockets = nil)
     @service_name = service_name
@@ -13,11 +13,24 @@ class Kits::ClientTemplates
   def generate
     result = []
     @template_files.map do |path|
-      name = self.class.template_name(path)
-      type = self.class.template_type(path)
-      "<script data-template-name=\"#{@service_name}.#{name}\" data-template-language=\"#{type}\" type=\"text/html\">#{template_body(path)}</script>"
+      template = grab_template(path)
+      "<script data-template-name=\"#{@service_name}.#{template[:name]}\" data-template-language=\"#{template[:type]}\" type=\"text/html\">#{template[:body]}</script>"
     end.join
   end
+
+  def grab_template(path)
+    result = {:name => self.class.template_name(path), :type => self.class.template_type(path),
+              :body => template_body(path)}
+    # Fu-templates are automatically converted to mustache.              
+    if result[:type] == 'fu'
+      raise "You must install and require 'fu' to use fu templates (#{path})" unless defined?(Fu)
+      result[:body] = Fu.to_mustache(result[:body])
+      result[:type] = 'mustache'
+    end
+    result
+  end
+
+  private
 
   def self.template_name(path)
     File.basename(path).scan(/^[^\.]+/).first.to_sym

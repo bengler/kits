@@ -1,8 +1,11 @@
 require 'spec_helper'
 require 'json'
+require 'kits/sinatra'
+require 'fu/tilt'
 
 class KitApp < Sinatra::Base
-  set :root, File.dirname(__FILE__)+"/fixtures"
+  set :root, File.dirname(__FILE__)+"/fixtures"  
+  set :service_name, 'example'
   register Sinatra::PartsKit
 end
 
@@ -22,7 +25,7 @@ describe "API v1 posts" do
 
   it "Has a kit property" do
     app.kit.should_not be_nil
-    app.kit.parts.keys.sort.should eq ['demo', 'other', 'withcss', 'hamlpart', 'mustachepart'].sort
+    app.kit.parts.keys.sort.should eq ['demo', 'other', 'withcss', 'hamlpart', 'mustachepart', 'fupart'].sort
   end
 
   it "Presents the registered parts" do
@@ -68,11 +71,16 @@ describe "API v1 posts" do
     last_response.body.should =~ /mustachetemplate/    
   end
 
+  it "packages fu-templates with the client_templates converted to mustache" do
+    get "/parts/client_templates"
+    last_response.body.should_not =~ /application\serror/
+    last_response.body.should =~ /\<p\>Hello from fu\!\<\/p\>/
+  end
+
   it "can render mustache templates on the server too" do
     get "/parts/mustachepart"
     last_response.body.should_not =~ /application\serror/
     last_response.body.should_not =~ /\{\{mustache\}\}/
     last_response.body.should =~ /Hello from data/
   end
-
 end

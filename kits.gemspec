@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rack-test"
   s.add_development_dependency "sinatra"
   s.add_dependency "sprockets"
+  s.add_development_dependency "fu"
   s.add_development_dependency "coffee-script"
   s.add_development_dependency "haml"
   s.add_development_dependency "mustache"
