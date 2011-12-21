@@ -1,4 +1,5 @@
 # A class to generate client side template sheets
+require "json"
 
 class Kits::ClientTemplates
   attr_reader :template_files
@@ -11,11 +12,11 @@ class Kits::ClientTemplates
   end
 
   def generate
-    result = []
-    @template_files.map do |path|
-      template = grab_template(path)
-      "<script data-template-name=\"#{@service_name}.#{template[:name]}\" data-template-language=\"#{template[:type]}\" type=\"text/html\">#{template[:body]}</script>"
-    end.join
+    templates = Hash[@template_files.map {|path|
+        template = grab_template(path)
+        [template[:name], template[:body]]
+      }]
+    "define('#{@service_name}/parts/templates', #{templates.to_json})"
   end
 
   def grab_template(path)

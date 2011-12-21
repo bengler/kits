@@ -40,7 +40,7 @@ module Sinatra
         content = File.read(path)
         app.template(template_key) { content }
       end
-      app.get "/parts/client_templates" do
+      app.get "/parts/client_templates.js" do
         @embeddable_client_template_html ||= 
           Kits::ClientTemplates.new(
             app.service_name,
