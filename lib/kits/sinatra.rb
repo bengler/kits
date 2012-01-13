@@ -40,12 +40,29 @@ module Sinatra
         content = File.read(path)
         app.template(template_key) { content }
       end
-      app.get "/parts/client_templates.js" do
+      app.get "/parts/client_templates.json" do
+        content_type :json
         @embeddable_client_template_html ||= 
           Kits::ClientTemplates.new(
             app.service_name,
             app.kit.templates, 
-            app.kit_sprockets).generate
+            app.kit_sprockets).generate_json
+      end
+      app.get "/parts/client_templates.amd.js" do
+        content_type :js
+        @embeddable_client_template_html ||=
+          Kits::ClientTemplates.new(
+            app.service_name,
+            app.kit.templates,
+            app.kit_sprockets).generate_amd
+      end
+      app.get "/parts/client_templates.html" do
+        content_type :html
+        @embeddable_client_template_html ||=
+          Kits::ClientTemplates.new(
+            app.service_name,
+            app.kit.templates,
+            app.kit_sprockets).generate_html
       end
     end
   end

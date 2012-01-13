@@ -11,12 +11,18 @@ class Kits::ClientTemplates
     @sprockets = sprockets
   end
 
-  def generate
-    templates = Hash[@template_files.map {|path|
-        template = grab_template(path)
-        [template[:name], template[:body]]
-      }]
-    "define('#{@service_name}/parts/templates', #{templates.to_json})"
+  def generate_amd
+    "define('#{@service_name}/parts/templates', #{read_templates.to_json})"
+  end
+
+  def generate_html
+    read_templates.map do |name, template|
+      "<script data-template-name=\"#{@service_name}.#{name}\" data-template-language=\"#{template[:type]}\" type=\"text/html\">#{template[:body]}</script>"
+    end.join
+  end
+
+  def generate_json
+    read_templates.to_json
   end
 
   def grab_template(path)
@@ -33,6 +39,13 @@ class Kits::ClientTemplates
 
   private
 
+  def read_templates
+    Hash[@template_files.map {|path|
+      template = grab_template(path)
+      [template[:name], template]
+    }]
+  end
+
   def self.template_name(path)
     File.basename(path).scan(/^[^\.]+/).first.to_sym
   end
@@ -43,7 +56,8 @@ class Kits::ClientTemplates
 
   def template_body(path)
     asset = @sprockets.find_asset(File.basename(path))
-    return asset.body if asset
-    File.read(path)
+    body = asset.body if asset
+    body = File.read(path)
+    body.force_encoding("UTF-8")
   end
 end
